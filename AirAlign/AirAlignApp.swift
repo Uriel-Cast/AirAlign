@@ -1,32 +1,24 @@
-//
-//  AirAlignApp.swift
-//  AirAlign
-//
-//  Created by Uriel Castillo on 04/03/26.
-//
+// AirAlignApp.swift
+// AirAlign — App Entry Point
 
 import SwiftUI
 import SwiftData
 
 @main
 struct AirAlignApp: App {
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Item.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
+    private let container: ModelContainer = {
         do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
+            return try ModelContainerFactory.makeProductionContainer()
         } catch {
-            fatalError("Could not create ModelContainer: \(error)")
+            fatalError("Failed to create ModelContainer: \(error)")
         }
     }()
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainTabView()
         }
-        .modelContainer(sharedModelContainer)
+        .modelContainer(container)
     }
 }
